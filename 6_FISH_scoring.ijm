@@ -27,7 +27,6 @@ function Adapted_Thresholding(Th,Im) {
 		setThreshold(1,255);
 		run("Create Selection");
 		roiManager("Add");
-//		waitForUser("Check and delete");
 		run("Select None");
 		close("Im_Copy");
 		T=1;
@@ -106,38 +105,26 @@ T1=Adapted_Thresholding(Threshold_Contrast,title+"_Local Contrast");
 
 	}
 		function contrast_singleROI_calculation(img, roi) {
-//waitForUser("3");
-//selectImage(title+"_Local Contrast Origin");
-//roi=newArray(ROI0,ROI_position);
+
 selectImage(img);
-//Array.print(roi);
-roiManager("Select", roi);
-//getSelectionBounds(xroi,yroi,wroi,hroi);
-//makeRectangle(xroi-1,yroi-1,wroi+2,hroi+2);
+
 getRawStatistics(nPixels, mean, min, max);
 run("Measure");
 MaxSignal=getResult("Max");
 MinSignal=getResult("Min");
-//MeanSignal=getResult("Mean");
 Contrast=(MaxSignal-MinSignal)/(MaxSignal+MinSignal);
-//print("MaxSignal"+MaxSignal+"MinSignal"+MinSignal+"Contrast"+Contrast);
 return Contrast;
 
 }
 	function contrast_calculation(img, roi) {
-
-//selectImage(title+"_Local Contrast Origin");
-//roi=newArray(ROI0,ROI_position);
 selectImage(img);
-//Array.print(roi);
-roiManager("Select", roi);
+oiManager("Select", roi);
 roiManager("AND"); //merge two region of interest: one is mask and one is nuclei
 getRawStatistics(nPixels, mean, min, max);
 run("Measure");
 MaxSignal=getResult("Max");
 MinSignal=getResult("Min");
 MeanSignal=getResult("Mean");
-//waitForUser("3");
 Contrast=(MaxSignal-MinSignal)/(MaxSignal+MinSignal);
 return Contrast;
 
@@ -147,31 +134,21 @@ macro "MACRO_Batch_Counting"{
 showMessage("You are running FISH segmentation and count");
 
 showMessage("Please select the folder containing raw FISH tiles");
-//I:\experiment\IHC FISH\Joint project with Daniel\BC2\aligned z01 d\FISH\TIFF
-//input="E:/Tuan/IHC FISH/Joint project with Daniel/BC2/FISH/2Z01 BC2/2z01 left flower aliged/FISH tiles/TIFF/";
-
 input=getDirectory("Input directory");
 print(input);
-//cancerPosition="I:/experiment/IHC FISH/Joint project with Daniel/BC2/skbr3/tile heatmap 3/0.txt";
 cancerPosition=substring(input,0,lengthOf(input)-16)+"Tiles heatmap"+File.separator+"cancerArea.txt";
 
-//cancerPosition=File.openDialog("Choose the file where image cancer position were stored"); 
 print(cancerPosition);
 CPstring=File.openAsString(cancerPosition); //open the file as a string
 CProws=split(CPstring,"\n"); // split by using ; and enumerate
 CPArray = newArray(lengthOf(CProws));
 for (i=0;i<lengthOf(CProws);i++){
 CPArray[i]=parseInt(CProws[i]);
-//print(CPArray[i]);
 }
-//showMessage("Please create the folder for processed FISH tiles");	
-//output="I:/experiment/IHC FISH/Joint project with Daniel/BC2/skbr3/output FISH 3/";
 output=substring(input,0,lengthOf(input)-16)+"output FISH"+File.separator;
 File.makeDirectory(output);
 print(output);
-//Dialog.create("File type");
-//Dialog.addString("File suffix: ", ".tif", 5);
-//Dialog.show();
+
 suffix = ".tif";
 run("Clear Results");
 //showMessage("Please create your FISH count result");
