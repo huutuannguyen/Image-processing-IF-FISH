@@ -1,4 +1,4 @@
-//Diego intergration code
+//IF analysis for a large image, output IF score
 var sharpen_radius=2; sharpen_weight=0.9; 
 
 var Threshold_Contrast=50;
